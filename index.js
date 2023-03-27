@@ -58,13 +58,27 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+const isDuplicated = (data) => {
+    const duplicatedPersons = persons.filter(p => p.name === data.name)
+    if (duplicatedPersons.length !== 0) return true
+    return false
+}
+
 app.post('/api/persons', (request, response) => {
     const body = request.body
     console.log(body)
 
-    if (!body.name || !body.number) {
+    if (!body.name) {
         return response.status(400).json({
-            error: 'content missing'
+            error: 'name is missing'
+        })
+    } else if (!body.number) {
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    } else if (isDuplicated(body)) {
+        return response.status(400).json({
+            error: 'duplicated name'
         })
     }
 

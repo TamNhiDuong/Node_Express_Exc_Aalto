@@ -1,10 +1,13 @@
 const express = require('express')
 const morgan = require('morgan')
 
+morgan.token('data', function (req, res) { return JSON.stringify(req.body) })
+
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+//app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 let persons = [
     {
@@ -70,7 +73,6 @@ const isDuplicated = (data) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    console.log(body)
 
     if (!body.name) {
         return response.status(400).json({

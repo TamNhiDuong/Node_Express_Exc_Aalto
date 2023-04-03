@@ -92,21 +92,25 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({
             error: 'number is missing'
         })
-    } else if (isDuplicated(body)) {
-        return response.status(400).json({
-            error: 'duplicated name'
-        })
-    }
+    } 
+    // else if (isDuplicated(body)) {
+    //     return response.status(400).json({
+    //         error: 'duplicated name'
+    //     })
+    // }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
         id: Math.floor(Math.random() * 1000000)
-    }
+    })
 
-    persons = persons.concat(person)
+    person.save().then(savedPerson => {
+        response.json(savedPerson)
+    })
 
-    response.json(person)
+    // persons = persons.concat(person)
+    // response.json(person)
 })
 
 const PORT = process.env.PORT

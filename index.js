@@ -69,11 +69,19 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(p => p.id !== id)
+    // const id = Number(request.params.id)
+    // persons = persons.filter(p => p.id !== id)
 
-    response.status(204).end()
+    // response.status(204).end()
+
+    console.log('ID: ', request.params.id)
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(err => console.log('Err: ', err))
 })
+
 
 const isDuplicated = (data) => {
     const duplicatedPersons = persons.filter(p => p.name === data.name)
@@ -92,7 +100,7 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({
             error: 'number is missing'
         })
-    } 
+    }
     // else if (isDuplicated(body)) {
     //     return response.status(400).json({
     //         error: 'duplicated name'
@@ -115,5 +123,5 @@ app.post('/api/persons', (request, response) => {
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })

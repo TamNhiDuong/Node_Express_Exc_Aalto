@@ -64,21 +64,12 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-    // response.json(persons)
     Person.find({}).then(result => {
         response.json(result)
     })
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    // const id = Number(request.params.id)
-    // const person = persons.find(p => p.id === id)
-
-    // if (person) {
-    //     response.json(person)
-    // } else {
-    //     response.status(404).end()
-    // }
     Person.findById(request.params.id)
         .then(person => {
             if (person) {
@@ -91,12 +82,6 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
-    // const id = Number(request.params.id)
-    // persons = persons.filter(p => p.id !== id)
-
-    // response.status(204).end()
-
-    console.log('ID: ', request.params.id)
     Person.findByIdAndRemove(request.params.id)
         .then(result => {
             response.status(204).end()
@@ -104,12 +89,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 })
 
-
-const isDuplicated = (data) => {
-    const duplicatedPersons = persons.filter(p => p.name === data.name)
-    if (duplicatedPersons.length !== 0) return true
-    return false
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -123,11 +102,6 @@ app.post('/api/persons', (request, response) => {
             error: 'number is missing'
         })
     }
-    // else if (isDuplicated(body)) {
-    //     return response.status(400).json({
-    //         error: 'duplicated name'
-    //     })
-    // }
 
     const person = new Person({
         name: body.name,
@@ -138,9 +112,6 @@ app.post('/api/persons', (request, response) => {
     person.save().then(savedPerson => {
         response.json(savedPerson)
     })
-
-    // persons = persons.concat(person)
-    // response.json(person)
 })
 
 app.put('/api/persons/:id', (request, response, next) => {

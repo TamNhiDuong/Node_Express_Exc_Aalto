@@ -3,4 +3,4 @@ Deployment to Render (https://render.com/) at: https://phonebook-node-backend.on
 DB: https://cloud.mongodb.com/
 
 RUN ESLINT: 
-npx eslint index.js
+npm run lint
